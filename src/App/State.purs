@@ -7,7 +7,7 @@ import Control.Bind (bind)
 import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, jsonEmptyObject, (.?), (:=), (~>))
 import Data.Function (($))
 
-data Todo = Todo
+newtype Todo = Todo
   { id :: Int
   , text :: String
   , newText :: String
@@ -15,7 +15,7 @@ data Todo = Todo
   , editing :: Boolean
   }
 
-data State = State
+newtype State = State
   { title :: String
   , loaded :: Boolean
   , route :: Route

@@ -12,11 +12,36 @@ import Data.Function (const, flip, ($))
 import Data.Monoid (mempty)
 import Data.Show (show)
 import Pux.DOM.Events (onClick, onDoubleClick, onKeyUp)
-import Pux.DOM.HTML (HTML)
+import Pux.DOM.HTML (HTML, memoize)
 import Pux.DOM.HTML.Attributes (focused, key)
 import Text.Smolder.HTML (a, button, div, footer, h1, header, input, label, li, p, section, span, strong, ul)
 import Text.Smolder.HTML.Attributes (checked, className, for, href, placeholder, type', value)
 import Text.Smolder.Markup ((!), (!?), (#!), text)
+
+item :: Todo -> HTML Event
+item = memoize \(Todo todo) ->
+  li
+    ! className (if todo.completed then "completed" else (if todo.editing then "editing" else ""))
+    ! key (show todo.id) $ do
+    if todo.editing then
+      input
+        #! onKeyUp (TodoInput todo.id)
+        ! type' "text"
+        ! className "edit"
+        ! focused
+        ! value todo.newText
+      else
+        div ! className "view" $ do
+          (input
+            !? todo.completed) (checked "checked")
+            #! onClick (ToggleCompleted todo.id)
+            ! className "toggle"
+            ! type' "checkbox"
+          label #! onDoubleClick (ToggleEditing todo.id) $ text todo.text
+          button
+            #! onClick (RemoveTodo todo.id)
+            ! className "destroy"
+            $ mempty
 
 view :: State -> HTML Event
 view (State st) =
@@ -38,29 +63,7 @@ view (State st) =
         input ! className "toggle-all" ! type' "checkbox"
         label ! for "toggle-all" $ text "Mark all as complete"
         ul ! className "todo-list" $ do
-          for_ filtered \(Todo todo) ->
-            li
-              ! className (if todo.completed then "completed" else (if todo.editing then "editing" else ""))
-              ! key (show todo.id) $ do
-              if todo.editing then
-                input
-                  #! onKeyUp (TodoInput todo.id)
-                  ! type' "text"
-                  ! className "edit"
-                  ! focused
-                  ! value todo.newText
-                else
-                  div ! className "view" $ do
-                    (input
-                      !? todo.completed) (checked "checked")
-                      #! onClick (ToggleCompleted todo.id)
-                      ! className "toggle"
-                      ! type' "checkbox"
-                    label #! onDoubleClick (ToggleEditing todo.id) $ text todo.text
-                    button
-                      #! onClick (RemoveTodo todo.id)
-                      ! className "destroy"
-                      $ mempty
+          for_ filtered item
       if ((length st.todos) == 0) then mempty else footer ! className "footer" $ do
         span ! className "todo-count" $ do
           let len = length (flip filter st.todos \(Todo t) -> not t.completed)

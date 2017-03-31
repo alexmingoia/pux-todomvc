@@ -1,10 +1,9 @@
-var ClientEntry = require('../src/Client.purs');
-var debug = process.env.NODE_ENV === 'development'
+const ClientEntry = require('../src/Client.purs');
 
-var initialState = ClientEntry.readState(window.__puxInitialState);
+const initialState = ClientEntry.readState(window.__puxInitialState);
 
 if (module.hot) {
-  ClientEntry.main(window.location.pathname)(window.__puxLastState || initialState)()
+  let app = ClientEntry.main(window.location.pathname)(window.__puxLastState || initialState)()
 
   app.state.subscribe(function (state) {
    window.__puxLastState = state;
@@ -12,5 +11,5 @@ if (module.hot) {
 
   module.hot.accept();
 } else {
-  ClientEntry.main(window.location.pathname)(puxInitialState)()
+  ClientEntry.main(window.location.pathname)(initialState)()
 }

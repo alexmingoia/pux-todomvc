@@ -17,7 +17,6 @@
     "purescript-node-fs": "^3.0.0",
     "purescript-aff": "^2.0.2",
     "purescript-affjax": "^3.0.2",
-    "purescript-localstorage": "^3.0.1",
     "purescript-dom": "^3.5.1"
   }
 }

@@ -1,0 +1,46 @@
+{
+  "name": "pux-todomvc",
+  "version": "1.0.0",
+  "description": "Pux TodoMVC.",
+  "main": "support/index.js",
+  "keywords": [
+    "pux",
+    "purescript-pux",
+    "todomvc"
+  ],
+  "scripts": {
+    "postinstall": "bower cache clean && bower install",
+    "clean": "rimraf static/dist && rimraf dist",
+    "build": "npm run clean && webpack --config ./webpack.config.client.js --progress --profile --colors && webpack --config ./webpack.config.server.js --progress --profile --colors",
+    "watch": "npm run clean && node ./webpack.config.client.js",
+    "serve": "npm run build && node ./dist/server.js",
+    "start": "npm run watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexmingoia/pux-todomvc.git"
+  },
+  "author": "Alexander C. Mingoia",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/alexmingoia/pux-todomvc/issues"
+  },
+  "dependencies": {
+    "bower": "^1.7.9",
+    "connect-history-api-fallback": "^1.2.0",
+    "express": "^4.13.4",
+    "http-server": "^0.9.0",
+    "preact": "^7.2.0",
+    "preact-compat": "^3.13.1",
+    "purescript": "^0.10.1",
+    "purescript-psa": "^0.3.9",
+    "purs-loader": "^2.1.1",
+    "rimraf": "^2.5.2",
+    "webpack": "^2.1.0-beta.25",
+    "webpack-dev-middleware": "^1.9.0",
+    "webpack-hot-middleware": "^2.12.2",
+    "webpack-node-externals": "^1.5.4",
+    "xhr2": "^0.1.3"
+  }
+}

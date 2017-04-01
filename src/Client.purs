@@ -5,6 +5,7 @@ import App.Events (Event(..), foldp)
 import App.Routes (match)
 import App.State (State, init)
 import App.View.Layout (view)
+import Control.Applicative (pure)
 import Control.Bind (bind)
 import Control.Monad.Eff (Eff)
 import DOM.HTML (window)
@@ -18,13 +19,15 @@ import Data.Functor ((<$>))
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.Nullable (toMaybe)
 import Data.Show (show)
-import Data.Unit (Unit)
-import Pux (CoreEffects, start)
+import Pux (CoreEffects, App, start)
+import Pux.DOM.Events (DOMEvent)
 import Pux.DOM.History (sampleURL)
 import Pux.Renderer.React (renderToDOM)
 import Signal (runSignal, (~>))
 
-main :: ∀ fx. String -> State -> Eff (CoreEffects (AppEffects fx)) Unit
+type WebApp = App (DOMEvent -> Event) Event State
+
+main :: ∀ fx. String -> State -> Eff (CoreEffects (AppEffects fx)) WebApp
 main url state = do
   win <- window
   -- | Fetch previous state from localStorage
@@ -52,6 +55,8 @@ main url state = do
   -- | Persist state to localStorage
   runSignal $ app.state ~> \st ->
     setItem "pux:state" (show (encodeJson st)) storage
+
+  pure app
 
 readState :: Json -> State
 readState json = either (\_ -> init "/") id $ decodeJson json

@@ -11,7 +11,7 @@ import Data.Foldable (for_)
 import Data.Function (const, flip, ($))
 import Data.Monoid (mempty)
 import Data.Show (show)
-import Pux.DOM.Events (onClick, onDoubleClick, onKeyUp)
+import Pux.DOM.Events (onClick, onChange, onDoubleClick, onKeyUp)
 import Pux.DOM.HTML (HTML, memoize)
 import Pux.DOM.HTML.Attributes (focused, key)
 import Text.Smolder.HTML (a, button, div, footer, h1, header, input, label, li, p, section, span, strong, ul)
@@ -34,7 +34,7 @@ item = memoize \(Todo todo) ->
         div ! className "view" $ do
           (input
             !? todo.completed) (checked "checked")
-            #! onClick (ToggleCompleted todo.id)
+            #! onChange (ToggleCompleted todo.id)
             ! className "toggle"
             ! type' "checkbox"
           label #! onDoubleClick (ToggleEditing todo.id) $ text todo.text

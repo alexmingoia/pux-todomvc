@@ -7,7 +7,6 @@
 - Filter todos
 - Routing using HTML5 History
 - Caching via localStorage
-- Isomorphic rendering
 
 ## Installation
 
@@ -20,4 +19,4 @@ npm install
 npm start
 ```
 
-After compiling the app should be available at `http://localhost:3000`.
+After compiling the app should be available at `http://localhost:8080`.

@@ -1,16 +1,12 @@
 module App.View.TodoList where
 
+import Prelude hiding (div)
 import App.Routes (Route(..))
 import App.State (State(..), Todo(..))
 import App.Events (Event(..))
-import Control.Bind (bind)
 import Data.Array (filter, length)
-import Data.BooleanAlgebra (not)
-import Data.Eq ((==))
 import Data.Foldable (for_)
-import Data.Function (const, flip, ($))
 import Data.Monoid (mempty)
-import Data.Show (show)
 import Pux.DOM.Events (onClick, onChange, onDoubleClick, onKeyUp)
 import Pux.DOM.HTML (HTML, memoize)
 import Pux.DOM.HTML.Attributes (focused, key)

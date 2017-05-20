@@ -1,10 +1,9 @@
 module App.Events where
 
+import Prelude
 import App.Effects (AppEffects)
 import App.Routes (Route, match)
 import App.State (State(..), Todo(..))
-import Control.Applicative (pure)
-import Control.Bind ((=<<), bind)
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Except (runExcept)
 import DOM.Event.Event (preventDefault)
@@ -13,14 +12,9 @@ import DOM.HTML (window)
 import DOM.HTML.History (DocumentTitle(..), URL(..), pushState)
 import DOM.HTML.Window (history)
 import Data.Array (filter, last, snoc)
-import Data.BooleanAlgebra (not)
 import Data.Either (either)
-import Data.Eq ((==), (/=))
 import Data.Foreign (toForeign)
-import Data.Function (const, flip, ($))
-import Data.Functor (map)
 import Data.Maybe (Maybe(..), maybe)
-import Data.Ring ((+))
 import Pux (EffModel, noEffects, onlyEffects)
 import Pux.DOM.Events (DOMEvent, targetValue)
 

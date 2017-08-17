@@ -6,8 +6,7 @@ import App.State (State(..), Todo(..))
 import App.Events (Event(..))
 import Data.Array (filter, length)
 import Data.Foldable (for_)
-import Data.Monoid (mempty)
-import Pux.DOM.Events (onClick, onChange, onDoubleClick, onKeyUp)
+import Pux.DOM.Events (onClick, onChange, onDoubleClick, onKeyPress)
 import Pux.DOM.HTML (HTML, memoize)
 import Pux.DOM.HTML.Attributes (focused, key)
 import Text.Smolder.HTML (a, button, div, footer, h1, header, input, label, li, p, section, span, strong, ul)
@@ -21,7 +20,7 @@ item = memoize \(Todo todo) ->
     ! key (show todo.id) $ do
     if todo.editing then
       input
-        #! onKeyUp (TodoInput todo.id)
+        #! onKeyPress (TodoInput todo.id)
         ! type' "text"
         ! className "edit"
         ! focused
@@ -37,7 +36,7 @@ item = memoize \(Todo todo) ->
           button
             #! onClick (RemoveTodo todo.id)
             ! className "destroy"
-            $ mempty
+            $ text ""
 
 view :: State -> HTML Event
 view (State st) =
@@ -51,7 +50,7 @@ view (State st) =
       header ! className "header" $ do
         h1 $ text "Todos"
         input
-          #! onKeyUp NewTodoInput
+          #! onKeyPress NewTodoInput
           ! className "new-todo"
           ! placeholder "What needs to be done?"
           ! value st.newTodo
@@ -60,7 +59,7 @@ view (State st) =
         label ! for "toggle-all" $ text "Mark all as complete"
         ul ! className "todo-list" $ do
           for_ filtered item
-      if ((length st.todos) == 0) then mempty else footer ! className "footer" $ do
+      if ((length st.todos) == 0) then text "" else footer ! className "footer" $ do
         span ! className "todo-count" $ do
           let len = length (flip filter st.todos \(Todo t) -> not t.completed)
           strong $ text (show len)
